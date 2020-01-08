@@ -103,7 +103,7 @@ class Conjured(NormalItem):
 
 if __name__ == '__main__':
 
-    inv = AgedBrie("Aged Brie", 2, 0)
+    item = AgedBrie("Aged Brie", 2, 0)
     print(item)
     
     for dia in range(1, 30):
