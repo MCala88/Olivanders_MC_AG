@@ -4,14 +4,13 @@ class GildedRose(object):
         self.items = items
         
     def get_items(self, name, sell_in, quality):
-        items = [
-        ['Aged Brie', 2, 0],
-        ['Elixir of the Mongoose', 5, 7],
-        ['Sulfuras, Hand of Ragnaros', 0, 80],
-        ['Backstage passes to a TAFKAL80ETC concert', 15, 20],
-        ['Conjured Mana Cake', 3, 6]
-        ]
-        return items
+        Brie = AgedBrie("Aged Brie", 2, 0)
+        Elixir = NormalItem("Elixir of the Mongoose", 5, 7)
+        Ragnaros = Sulfuras("Sulfuras, Hand of Ragnaros", 0, 80)
+        Tafkal = Backstagepass("Backstage passes to a TAFKAL80ETC concert", 15, 22)
+        ManaCake = Conjured("Conjured Mana Cake", 3, 6)
+
+        Inventory = [Brie, Elixir, Ragnaros, Tafkal, ManaCake]
         
     def update_quality(self):
         for item in self.items:
@@ -30,9 +29,11 @@ class NormalItem(Item):
     def __init__(self, name, sell_in, quality):
         Item.__init__(self, name, sell_in, quality)    
 
-    def set_SellIn(self): #no baja de cero
-        if self.sell_in:
-            self.sell_in = self.sell_in - 1
+    def set_SellIn(self):
+        if self.sell_in >= 0:
+            self.sell_in -= 1
+        else:
+            self.sell_in -= 1
 
     def setQuality(self, valor):
         if self.quality + valor > 50:
@@ -50,59 +51,96 @@ class NormalItem(Item):
         self.set_SellIn()
 
 class AgedBrie(NormalItem):
-    sell_in = 2
-    quality = 0
     def __init__(self, name, sell_in, quality):
         Item.__init__(self, name, sell_in, quality)
 
+    def setQuality(self):
+        self.quality()
+
     def update_quality(self):
-        if self.sell_in > 0:
-            self.quality += 1
+        if self.quality >= 50:
+            self.quality = 50
+        elif self.sell_in <= 0:
+            if self.quality >= 49:
+                self.quality = 50
+            else:
+                self.quality += 2
         else:
-            self.quality += 2
+            self.quality += 1
+        self.set_SellIn()
 
 class Sulfuras(NormalItem):
-    sell_in = 0
-    quality = 80
-    #def __init__(self, name, sell_in, quality):
-    #    Item.__init__(self, name, sell_in, quality)
-
     def update_quality(self):
-        assert self.quality == 80
-        
-    def set_SellIn(self):
-        assert self.sell_in == self.sell_in
+        assert self.quality == 80      
 
 class Backstagepass(NormalItem):
-    sell_in = 15
-    quality = 20
     def update_quality(self):
-        if self.sell_in > 10:
-            self.setQuality += 1
-        elif self.sell_in > 5:
-            self.setQuality += 2
-        elif self.sell_in > 0:
-            self.setQuality += 3
-        else:
+        if self.sell_in <= 0:
             self.quality = 0
-        #self.set_SellIn()
+        if self.quality >= 50:
+            self.quality = 50
+        elif self.sell_in > 10:
+            self.quality += 1
+        elif self.sell_in > 5:
+            if self.quality >= 49:
+                self.quality = 50
+            else:
+                self.quality += 2
+        elif self.sell_in > 0:
+            if self.quality >= 48:
+                self.quality = 50
+            else:
+                self.quality += 3
+        self.set_SellIn()
         
 class Conjured(NormalItem):
-    sell_in = 3
-    quality = 6
     def update_quality(self):
         if self.sell_in <= 0:
             self.setQuality(-4)
         else:
             self.setQuality(-2)
+        self.set_SellIn()
 
 if __name__ == '__main__':
 
-    item = NormalItem("Pene de fierro", 2, 3)
-    print(item)
-
-    for dia in range(1, 10):
+    item = AgedBrie("Aged Brie", 2, 0)
+    
+    for dia in range(1, 30):
         item.update_quality()
         print(item)
     
+    print ('---------------------------------')
 
+    item = NormalItem("Elixir of the Mongoose", 5, 7)
+    print(item)
+
+    for dia in range(1, 30):
+        item.update_quality()
+        print(item)
+
+    print ('---------------------------------')
+
+    item = Backstagepass("Backstage passes to a TAFKAL80ETC concert", 15, 22)
+    print(item)
+
+    for dia in range(1, 30):
+        item.update_quality()
+        print(item)
+
+    print ('---------------------------------')
+
+    item = AgedBrie("Aged Brie", 2, 1)
+    print(item)
+
+    for dia in range(1, 30):
+        item.update_quality()
+        print(item)
+
+    print ('---------------------------------')
+
+    item = Conjured("Conjured Mana Cake", 3, 6)
+    print(item)
+
+    for dia in range(1, 30):
+        item.update_quality()
+        print(item)
