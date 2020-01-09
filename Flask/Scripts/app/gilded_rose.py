@@ -25,10 +25,7 @@ class Item:
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
     
-class NormalItem(Item):
-    def __init__(self, name, sell_in, quality):
-        Item.__init__(self, name, sell_in, quality)    
-
+class NormalItem(Item):   
     def set_SellIn(self):
         if self.sell_in >= 0:
             self.sell_in -= 1
@@ -51,9 +48,6 @@ class NormalItem(Item):
         self.set_SellIn()
 
 class AgedBrie(NormalItem):
-    def __init__(self, name, sell_in, quality):
-        Item.__init__(self, name, sell_in, quality)
-
     def setQuality(self):
         self.quality()
 
@@ -61,7 +55,7 @@ class AgedBrie(NormalItem):
         if self.quality >= 50:
             self.quality = 50
         elif self.sell_in <= 0:
-            if self.quality >= 49:
+            if self.quality == 49:
                 self.quality = 50
             else:
                 self.quality += 2
@@ -82,7 +76,7 @@ class Backstagepass(NormalItem):
         elif self.sell_in > 10:
             self.quality += 1
         elif self.sell_in > 5:
-            if self.quality >= 49:
+            if self.quality == 49:
                 self.quality = 50
             else:
                 self.quality += 2
@@ -96,9 +90,9 @@ class Backstagepass(NormalItem):
 class Conjured(NormalItem):
     def update_quality(self):
         if self.sell_in <= 0:
-            self.setQuality(-4)
+            self.quality -= 4
         else:
-            self.setQuality(-2)
+            self.quality -= 2
         self.set_SellIn()
 
 if __name__ == '__main__':
